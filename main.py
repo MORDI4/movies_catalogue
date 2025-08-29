@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/')
 def homepage():
     movies = []
-    for i in range(10):
+    for i in range(8):
         movies.append(f.text(max_nb_chars=20).strip('.'))
     return render_template("homepage.html", movies=movies)
 
