@@ -8,27 +8,25 @@ params = {
     "api_key": '9bc6d3d51e3b68e16c55d55a019c262d'
 }
 
-global results
+def get_movies_list(list_name):
+    response = requests.get(f'{url}{list_name}', params=params).json()
+    data = response['results']
+    movies_list = []
+    for i in range(len(data)):
+        movies_list.append({'id': data[i]['id'],'title': data[i]['title'], 'poster_path': data[i]['poster_path']})
+    return movies_list
 
-def get_popular_movies():
-    response = requests.get(f'{url}popular', params=params)
-    return response.json()
-
-def get_movies(num):
-    data = get_popular_movies()
-    random.shuffle(data['results'])
-    return data['results'][:num]
-
-results = get_movies(8)
+def get_movies(num, list_name='popular'):
+    data = get_movies_list(list_name)
+    random.shuffle(data)
+    return data[:num]
 
 def get_poster_url(path,size):
     return f'https://image.tmdb.org/t/p/{size}{path}'
 
-def get_movie_info():
-    movies_info = []
-    for i in range(len(results)):
-        movies_info.append({'id': results[i]['id'],'title': results[i]['title'], 'poster_path': results[i]['poster_path']})
-    return movies_info
+def get_random_backdrop(movie_id):
+    response = requests.get(f'{url}{movie_id}/images', params=params).json()
+    return response['backdrops'][random.randint(0,len(response['backdrops'])-1)]['file_path']
 
 def get_movie_details(movie_id):
     response1 = requests.get(f'{url}{movie_id}', params=params).json()
@@ -39,7 +37,7 @@ def get_movie_details(movie_id):
         'overview': response1['overview'], 
         'genres': response1['genres'], 
         'budget': response1['budget'], 
-        'backdrop_path': response1['backdrop_path'],
+        'backdrop_path': get_random_backdrop(movie_id),
         'cast': [{'name': i['name'], 'profile_path': i['profile_path']} for i in response2['cast']]
         }
     
