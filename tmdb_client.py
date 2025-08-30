@@ -8,6 +8,8 @@ params = {
     "api_key": '9bc6d3d51e3b68e16c55d55a019c262d'
 }
 
+name_list = ['top_rated', 'upcoming', 'popular', 'now_playing']
+
 def get_movies_list(list_name):
     response = requests.get(f'{url}{list_name}', params=params).json()
     data = response['results']
