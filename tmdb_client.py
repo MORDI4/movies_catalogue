@@ -1,11 +1,16 @@
 import requests
 import random
+import os
 
+BASE_DIR = os.path.dirname(__file__)
+print(BASE_DIR)
+with open(os.path.join(BASE_DIR, "API_key.txt"), "r") as f:
+    api_key = f.read().strip()
 
 url = 'https://api.themoviedb.org/3/movie/'
 
 params = {
-    "api_key": '9bc6d3d51e3b68e16c55d55a019c262d'
+    "api_key": api_key
 }
 
 name_list = ['top_rated', 'upcoming', 'popular', 'now_playing']
